@@ -3,37 +3,35 @@ function openPlayerConfig(event) {
 	editedPlayer = +selectedPlayerId;
 	playerConfigOverlayElement.style.display = "block";
 	backdropElement.style.display = "block";
+	formElement.firstElementChild.lastElementChild.value = "";
 }
 
 function closePlayerConfig() {
 	playerConfigOverlayElement.style.display = "none";
 	backdropElement.style.display = "none";
 	formElement.firstElementChild.classList.remove("error");
-	errorOutput.textContent = "";
-	formElement.firstElementChild.lastElementChild.value = "";
+	errorsOutput.textContent = "";
 }
 
 function savePlayerConfig(event) {
 	event.preventDefault();
 	const formData = new FormData(event.target);
-	const enteredUsername = formData.get("username").trim();
+	const enteredPlayerName = formData.get("username").trim();
 
-	if (!enteredUsername) {
+	// Form Validation
+
+	if (!enteredPlayerName) {
 		event.target.firstElementChild.classList.add("error");
-		errorOutput.textContent = "Please enter a valid name!";
+		errorsOutput.textContent = "Please enter a valid name!";
 		return;
 	}
 
 	const updatedPlayerDataElement = document.getElementById(
 		"player-" + editedPlayer + "-data"
 	);
-	updatedPlayerDataElement.children[1].textContent = enteredUsername;
+	updatedPlayerDataElement.children[1].textContent = enteredPlayerName;
 
-	if (editedPlayer === 1) {
-		players[0].name = enteredUsername;
-	} else {
-		players[1].name = enteredUsername;
-	}
+	players[editedPlayer - 1].name = enteredPlayerName;
 
 	closePlayerConfig();
 }
